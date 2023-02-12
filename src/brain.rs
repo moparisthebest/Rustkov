@@ -124,7 +124,7 @@ impl Brain {
     }
 
     // let the brain learn from a text line.
-    fn ingest(&mut self, line: &str) {
+    pub fn ingest(&mut self, line: &str) {
         let line = line.to_lowercase();
 
         // We get the input as str, turn it into a vec of StateElement
@@ -301,27 +301,15 @@ impl Brain {
         let input = input.as_ref();
 
         if self.state_transitions.len() == 0 {
-            if self.config.training {
-                self.ingest(input);
-            }
-
             return Ok(None);
         }
 
         if self.config.mute && !bypass_checks {
-            if self.config.training {
-                self.ingest(input);
-            }
-
             return Ok(None);
         }
 
         // using ! bool since the config is about reply chance, not reply non chance.
         if !self.rng.gen_bool(self.config.reply_rate) && !bypass_checks {
-            if self.config.training {
-                self.ingest(input);
-            }
-
             return Ok(None);
         }
 
@@ -365,10 +353,6 @@ impl Brain {
         while *sentence.last().unwrap() != StateElement::Marker(SentenceMarker::End) {
             let next_element = self.get_element(SentenceDirection::Forward, &sentence);
             sentence.push(next_element.clone());
-        }
-
-        if self.config.training {
-            self.ingest(input);
         }
 
         Ok(Some(

@@ -30,9 +30,6 @@ pub struct BrainConfig {
     /// The greater it is, the bigger the brain struct will be.
     pub max_ingestion_state_size: usize,
 
-    /// Allow the brain to learn from inputs.
-    pub training: bool,
-
     /// Disallow the brain to output any response.
     pub mute: bool,
 
@@ -60,7 +57,6 @@ impl Default for BrainConfig {
     fn default() -> Self {
         Self {
             max_ingestion_state_size: 5,
-            training: false,
             mute: false,
             reply_rate: 1f64,
             min_generation_state_size: 2,
